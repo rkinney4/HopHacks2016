@@ -107,17 +107,17 @@ def get_contributors(owner, repo):
     if (response.getcode() == 202):
         return "Github doesn't have this information cached right now. Ask again in a few moments."
         
-    contributors = json.loads(response.read)
+    contributors = json.loads(response.read())
     numCont = len(contributors)
     
-    output += "There are " + numCont + " contributors: \n"
+    output += "There are " + str(numCont) + " contributors: \n"
     
     if numCont > 25:
         return output.strip('\n')
     
-    for i in range(numCont)
+    for i in range(numCont):
         contributor = contributors[i]['author']['login']
-        output += " {0} : {1}\n".format(i+1, contributor)
+        output += "{0} : {1} ,\n".format(i+1, contributor)
     
     return output.strip('\n')
 
@@ -144,5 +144,3 @@ def date_to_speech(date):
         day += 'rd'
 
     return datetime.strftime(date, "%B {0} %Y, %I:%M%p").format(day)
-
-print get_contributors('nodejs', 'node')

@@ -6,8 +6,10 @@ from git_requests import *
 
 # --------------- Helpers that build all of the responses ----------------------
 
-default_user = "nodejs"
-default_repo = "node"
+#default_user = "nodejs"
+#default_repo = "node"
+default_user = "rkinney4"
+default_repo = "HopHacks2016"
 default_branch = "master"
 
 def build_speechlet_response(title, output, reprompt_text, should_end_session):
