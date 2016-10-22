@@ -27,3 +27,7 @@ GetContributorsIntent who has contributed to this project
 GetContributorsIntent who are the contributors
 GetContributorsIntent list contributors
 GetContributorsIntent tell me the contributors to this project
+GetTopContributorsIntent get the top three contributors
+GetTopContributorsIntent get the top contributors
+GetTopContributorsIntent tell me the top contributors
+GetTopContributorsIntent tell me the top three contributors

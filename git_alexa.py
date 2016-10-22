@@ -174,6 +174,17 @@ def get_contributors_from_session(intent, session):
     return build_response(session_attributes, build_speechlet_response(
         intent['name'], speech_output, reprompt_text, should_end_session))
 
+def get_top_contributors_from_session(intent, session):
+    session_attributes = session.get('attributes', {})
+    card_title = intent['name']
+    should_end_session = False
+    reprompt_text = "I didn't quite git that"
+
+    speech_output = get_top_three_contributors(default_user, default_repo)
+
+    return build_response(session_attributes, build_speechlet_response(
+        intent['name'], speech_output, reprompt_text, should_end_session))
+
 # --------------- Events ------------------
 
 def on_session_started(session_started_request, session):
@@ -216,6 +227,8 @@ def on_intent(intent_request, session):
         return get_current_branch_from_session(intent, session)
     elif intent_name == "GetContributorsIntent":
         return get_contributors_from_session(intent, session)
+    elif intent_name == "GetTopContributorsIntent":
+        return get_top_contributors_from_session(intent, session)
     elif intent_name == "AMAZON.HelpIntent":
         return get_welcome_response()
     elif intent_name == "AMAZON.CancelIntent" or intent_name == "AMAZON.StopIntent":
