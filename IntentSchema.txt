@@ -1,0 +1,23 @@
+{
+  "intents": [
+    {
+      "intent": "GetLastCommitIntent"
+    },
+    {
+      "intent": "GetBranchesIntent"
+    },
+    {
+      "intent": "GetNCommitsIntent",
+      "slots": [
+        {
+          "name": "Num",
+          "type": "AMAZON.NUMBER"
+        }
+      ]
+      
+    },
+    {
+      "intent": "AMAZON.HelpIntent"
+    }
+  ]
+}

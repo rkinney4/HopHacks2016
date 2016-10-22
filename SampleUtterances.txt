@@ -1,0 +1,7 @@
+GetLastCommitIntent what was the last commit
+GetLastCommitIntent what was the previous commit
+GetLastCommitIntent tell me the last commit message
+GetLastCommitIntent tell me the last commit
+GetBranchesIntent list the branches
+GetBranchesIntent tell me the branches
+GetNCommitsIntent get me the last {Num} commits  
