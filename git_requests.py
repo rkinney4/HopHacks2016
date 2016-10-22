@@ -26,7 +26,7 @@ def last_n_commits(owner, repo, branch='master', n=3):
     commits = json.loads(response.read())
     
     if len(commits) < n:
-        plural = '' if n = 1 else 's'
+        plural = '' if n == 1 else 's'
         output += "I only found {0} commit{1}. ".format(len(commits), plural)
         n = len(commits)
     elif n > 1:
@@ -36,7 +36,7 @@ def last_n_commits(owner, repo, branch='master', n=3):
         c = parse_commit(commits[i]['commit'])
         plural = '' if n == 1 else i+1
         
-        output += "Commit {0} by {1} at {2}: {3}.".format(plural, author, date, message)
+        output += "Commit {0} by {1} at {2}: {3}. ".format(plural, c['author'], c['date'], c['message'])
     
     return output
         
@@ -69,7 +69,7 @@ def list_branches(owner, repo):
 
     return output
 
-def parse_commit(commit)
+def parse_commit(commit):
     output = {}
     output['author'] = commit['author']['name']
     output['date'] = commit['author']['date']
