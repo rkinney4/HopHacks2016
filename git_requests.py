@@ -91,6 +91,35 @@ def switch_branch(owner, repo, branch_num):
         output = "Switched to branch " + new_branch
     
     return (new_branch, output)
+    
+def get_contributors(owner, repo):
+    global base, headers
+    
+    output = ""
+    url = base + "/repos/{0}/{1}/stats/contributors".format(owner, repo)
+    
+    req = urllib2.Request(url, headers=headers)
+    try:
+        response = urllib2.urlopen(req)
+    except:
+        return "Sorry, I couldn't find what you asked for on github."
+    
+    if (response.getcode() == 202):
+        return "Github doesn't have this information cached right now. Ask again in a few moments."
+        
+    contributors = json.loads(response.read)
+    numCont = len(contributors)
+    
+    output += "There are " + numCont + " contributors: \n"
+    
+    if numCont > 25:
+        return output.strip('\n')
+    
+    for i in range(numCont)
+        contributor = contributors[i]['author']['login']
+        output += " {0} : {1}\n".format(i+1, contributor)
+    
+    return output.strip('\n')
 
 # ----------------- Helper Functions -----------------
     
@@ -115,3 +144,5 @@ def date_to_speech(date):
         day += 'rd'
 
     return datetime.strftime(date, "%B {0} %Y, %I:%M%p").format(day)
+
+print get_contributors('nodejs', 'node')
