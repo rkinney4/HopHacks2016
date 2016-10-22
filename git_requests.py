@@ -26,21 +26,25 @@ def last_n_commits(owner, repo, branch='master', n=3):
     commits = json.loads(response.read())
     
     if len(commits) < n:
-        output += "I only found {0} commits. ".format(len(commits))
+        plural = '' if n = 1 else 's'
+        output += "I only found {0} commit{1}. ".format(len(commits), plural)
         n = len(commits)
-    else:
+    elif n > 1:
         output += "Here are the last {0} commits. ".format(n)
     
     for i in range(n):
-        commit = commits[i]['commit']
+        c = parse_commit(commits[i]['commit'])
+        plural = '' if n == 1 else i+1
         
-        author = commit['author']['name']
-        date = commit['author']['date']
-        message = commit['message']
-        
-        commit_out = "Commit {0} by {1} at {2}: {3}.".format(i+1, author, date, message)
-        output += commit_out
+        output += "Commit {0} by {1} at {2}: {3}.".format(plural, author, date, message)
     
     return output
-        
+
+def parse_commit(commit)
+    output = {}
+    output['author'] = commit['author']['name']
+    output['date'] = commit['author']['date']
+    output['message'] = commit['message']
+    return output
+
 #def date_to_speech(format, date):
