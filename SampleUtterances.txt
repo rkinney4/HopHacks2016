@@ -3,14 +3,21 @@ GetLastCommitIntent what was the previous commit
 GetLastCommitIntent tell me the last commit message
 GetLastCommitIntent tell me the last commit
 GetLastCommitIntent get the last commit
+GetBranchesIntent list branches
 GetBranchesIntent list the branches
 GetBranchesIntent tell me the branches
 GetBranchesIntent give me the list of branches
+GetBranchesIntent what are the branches
 GetBranchesIntent what are the branches for this repo
+GetBranchesIntent what branches are there
+GetNCommitsIntent get the last {Num} commits 
 GetNCommitsIntent get me the last {Num} commits 
 GetNCommitsIntent list the last {Num} commits
 GetNCommitsIntent what are the last {Num} commits
 SwitchBranchIntent switch to branch {Num}
 SwitchBranchIntent change to branch {Num}
+SwitchBranchIntent go to branch {Num}
 GetCurrentBranchIntent get the current branch
 GetCurrentBranchIntent what is the current branch
+GetCurrentBranchIntent what branch am I on
+GetCurrentBranchIntent what branch is this
