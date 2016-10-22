@@ -167,8 +167,7 @@ def get_contributors_from_session(intent, session):
     should_end_session = False
     reprompt_text = "I didn't quite git that"
 
-
-    speech_output = "PUT CALL HERE"
+    speech_output = get_contributors(default_user, default_repo)
 
     return build_response(session_attributes, build_speechlet_response(
         intent['name'], speech_output, reprompt_text, should_end_session))
