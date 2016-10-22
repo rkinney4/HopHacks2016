@@ -6,6 +6,7 @@
 import sys
 import urllib2
 import json
+from datetime import datetime
 
 base = "http://api.github.com"
 headers = headers = {"Accept": "application/vnd.github.v3+json"}
@@ -36,11 +37,12 @@ def last_n_commits(owner, repo, branch='master', n=3):
         c = parse_commit(commits[i]['commit'])
         plural = '' if n == 1 else i+1
         
-        output += "Commit {0} by {1} at {2}: {3}. ".format(plural, c['author'], c['date'], c['message'])
+        output += "Commit {0} by {1}, on {2}: {3}. ".format(
+            plural, c['author'],
+            date_to_speech(c['date']),
+            c['message'])
     
     return output
-        
-#def date_to_speech(format, date):
 
 
 def get_branches(owner, repo):
@@ -75,7 +77,6 @@ def list_branches(owner, repo):
 
     return output
 
-
 def switch_branch(owner, repo, branch_num):
     branch_num = branch_num - 1
     output = ""
@@ -91,6 +92,8 @@ def switch_branch(owner, repo, branch_num):
     
     return (new_branch, output)
 
+# ----------------- Helper Functions -----------------
+    
 def parse_commit(commit):
     output = {}
     output['author'] = commit['author']['name']
@@ -98,4 +101,17 @@ def parse_commit(commit):
     output['message'] = commit['message']
     return output
 
-#def date_to_speech(format, date):
+def date_to_speech(date):
+    date = datetime.strptime(date, "%Y-%m-%dT%H:%M:%SZ")
+    day = datetime.strftime(date, "%d").lstrip('0')
+    
+    if day[-1:] in ['0','4', '5', '6', '7', '8', '9']:
+        day += 'th'
+    elif day[-1:] == '1':
+        day += 'st'
+    elif day[-1:] == '2':
+        day += 'nd'
+    elif day[-1:] == '3':
+        day += 'rd'
+
+    return datetime.strftime(date, "%B {0} %Y, %I:%M%p").format(day)
