@@ -1,19 +1,12 @@
-"""
-This sample demonstrates a simple skill built with the Amazon Alexa Skills Kit.
-The Intent Schema, Custom Slots, and Sample Utterances for this skill, as well
-as testing instructions are located at http://amzn.to/1LzFrj6
-
-For additional samples, visit the Alexa Skills Kit Getting Started guide at
-http://amzn.to/1LGWsLG
-"""
 from __future__ import print_function
-import urllib2
-import sys
-import json
-import httplib
 
+import sys
+from git_requests import *
 
 # --------------- Helpers that build all of the responses ----------------------
+
+def_user = rkinney4
+def_repo = HopHacks2016
 
 def build_speechlet_response(title, output, reprompt_text, should_end_session):
     return {
@@ -76,6 +69,8 @@ def handle_session_end_request():
 
 
 def get_last_n_commits_from_session(intent, session):
+    global def_user, def_repo
+
     session_attributes = {}
     card_title = intent['name']
     should_end_session = False
@@ -88,7 +83,8 @@ def get_last_n_commits_from_session(intent, session):
         speech_output = "I'm not sure how many commits you want. " \
                         "Please try again."
 
-    #speech_output = "Insert last n commits here"
+    speech_output = last_n_commits(def_user, def_repo)
+    
     return build_response(session_attributes, build_speechlet_response(
         intent['name'], speech_output, reprompt_text, should_end_session))
 
@@ -98,7 +94,7 @@ def get_last_commit_from_session(intent, session):
     should_end_session = False
     reprompt_text = "I didn't quite git that"
 
-    speech_output = "Insert last commit here"
+    speech_output = last_n_commits(def_user, def_repo, n=1)
 
     return build_response(session_attributes, build_speechlet_response(
         intent['name'], speech_output, reprompt_text, should_end_session))
