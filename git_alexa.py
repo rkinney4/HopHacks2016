@@ -5,8 +5,8 @@ from git_requests import *
 
 # --------------- Helpers that build all of the responses ----------------------
 
-def_user = "nodejs"
-def_repo = "node"
+default_user = "nodejs"
+default_repo = "node"
 
 def build_speechlet_response(title, output, reprompt_text, should_end_session):
     return {
@@ -69,7 +69,7 @@ def handle_session_end_request():
 
 
 def get_last_n_commits_from_session(intent, session):
-    global def_user, def_repo
+    global default_user, default_repo
 
     session_attributes = {}
     card_title = intent['name']
@@ -83,7 +83,7 @@ def get_last_n_commits_from_session(intent, session):
         speech_output = "I'm not sure how many commits you want. " \
                         "Please try again."
 
-    speech_output = last_n_commits(def_user, def_repo)
+    speech_output = last_n_commits(default_user, default_repo)
     
     return build_response(session_attributes, build_speechlet_response(
         intent['name'], speech_output, reprompt_text, should_end_session))
@@ -94,7 +94,7 @@ def get_last_commit_from_session(intent, session):
     should_end_session = False
     reprompt_text = "I didn't quite git that"
 
-    speech_output = last_n_commits(def_user, def_repo, n=1)
+    speech_output = last_n_commits(default_user, default_repo, n=1)
 
     return build_response(session_attributes, build_speechlet_response(
         intent['name'], speech_output, reprompt_text, should_end_session))
@@ -105,7 +105,7 @@ def get_branches_from_session(intent, session):
     should_end_session = False
     reprompt_text = "I didn't quite git that"
 
-    speech_output = list_branches(def_user, def_repo)
+    speech_output = list_branches(default_user, default_repo)
 
     return build_response(session_attributes, build_speechlet_response(
         intent['name'], speech_output, reprompt_text, should_end_session))
