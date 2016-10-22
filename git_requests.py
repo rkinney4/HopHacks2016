@@ -44,3 +44,30 @@ def last_n_commits(owner, repo, branch='master', n=3):
     return output
         
 #def date_to_speech(format, date):
+
+def list_branches(owner, repo):
+    global base, headers
+    
+    output = ""
+
+    url = base + "/repos/{0}/{1}/branches".format(owner, repo)
+    
+    req = urllib2.Request(url, headers=headers)
+    try:
+        response = urllib2.urlopen(req)
+    except:
+        return "Sorry, there was an error getting the branches."
+
+    branches = json.loads(response.read())
+    n = len(branches)
+
+    if n == 1:
+        output += "I found 1 branch. "
+    else:
+        output += "I found {0} branches. ".format(n)
+
+    for i in range(n):
+        branch_name = branches[i]['name']
+        output += "Branch {0} : {1} .".format(i+1, branch_name)
+
+    return output

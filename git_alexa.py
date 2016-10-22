@@ -5,8 +5,8 @@ from git_requests import *
 
 # --------------- Helpers that build all of the responses ----------------------
 
-def_user = rkinney4
-def_repo = HopHacks2016
+def_user = "rkinney4"
+def_repo = "HopHacks2016"
 
 def build_speechlet_response(title, output, reprompt_text, should_end_session):
     return {
@@ -105,7 +105,7 @@ def get_branches_from_session(intent, session):
     should_end_session = False
     reprompt_text = "I didn't quite git that"
 
-    speech_output = "Insert branches here"
+    speech_output = list_branches(def_user, def_repo)
 
     return build_response(session_attributes, build_speechlet_response(
         intent['name'], speech_output, reprompt_text, should_end_session))
