@@ -28,21 +28,21 @@ def last_n_commits(owner, repo, branch='master', n=3):
     
     if len(commits) < n:
         plural = '' if n == 1 else 's'
-        output += "I only found {0} commit{1}. ".format(len(commits), plural)
+        output += "I only found {0} commit{1}: \n".format(len(commits), plural)
         n = len(commits)
     elif n > 1:
-        output += "Here are the last {0} commits. ".format(n)
+        output += "Here are the last {0} commits: \n".format(n)
     
     for i in range(n):
         c = parse_commit(commits[i]['commit'])
         plural = '' if n == 1 else i+1
         
-        output += "Commit {0} by {1}, on {2}: {3}. ".format(
+        output += "Commit {0} by {1}, on {2}:\n {3}. \n\n".format(
             plural, c['author'],
             date_to_speech(c['date']),
             c['message'])
     
-    return output
+    return output.strip('\n')
 
 
 def get_branches(owner, repo):
@@ -67,13 +67,13 @@ def list_branches(owner, repo):
     n = len(branches)
 
     if n == 1:
-        output += "I found 1 branch. "
+        output += "I found 1 branch: \n"
     else:
-        output += "I found {0} branches. ".format(n)
+        output += "I found {0} branches: \n".format(n)
 
     for i in range(n):
         branch_name = branches[i]['name']
-        output += "Branch {0} : {1} .".format(i+1, branch_name)
+        output += "Branch {0} : {1} \n".format(i+1, branch_name)
 
     return output
 
