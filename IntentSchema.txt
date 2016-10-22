@@ -10,6 +10,9 @@
       "intent": "GetCurrentBranchIntent"
     },
     {
+      "intent": "GetContributorsIntent"
+    },
+    {
       "intent": "GetNCommitsIntent",
       "slots": [
         {

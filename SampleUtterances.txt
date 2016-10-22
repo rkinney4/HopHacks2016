@@ -21,3 +21,7 @@ GetCurrentBranchIntent get the current branch
 GetCurrentBranchIntent what is the current branch
 GetCurrentBranchIntent what branch am I on
 GetCurrentBranchIntent what branch is this
+GetContributorsIntent list the contributor
+GetContributorsIntent who contributed to this project
+GetContributorsIntent who has contributed to this project
+GetContributorsIntent tell me the contributors to this project
