@@ -7,7 +7,20 @@
       "intent": "GetBranchesIntent"
     },
     {
+      "intent": "GetCurrentBranchIntent"
+    },
+    {
       "intent": "GetNCommitsIntent",
+      "slots": [
+        {
+          "name": "Num",
+          "type": "AMAZON.NUMBER"
+        }
+      ]
+      
+    }, 
+    {
+      "intent": "SwitchBranchIntent",
       "slots": [
         {
           "name": "Num",

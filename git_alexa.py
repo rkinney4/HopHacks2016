@@ -1,12 +1,14 @@
 from __future__ import print_function
 
 import sys
+import string
 from git_requests import *
 
 # --------------- Helpers that build all of the responses ----------------------
 
 def_user = "nodejs"
 def_repo = "node"
+default_branch = "master"
 
 def build_speechlet_response(title, output, reprompt_text, should_end_session):
     return {
@@ -37,6 +39,12 @@ def build_response(session_attributes, speechlet_response):
     }
 
 
+def get_branch_from_attributes(session_attributes):
+    if 'currentBranch' in session_attributes:
+        return session_attributes['currentBranch']
+    else:
+        return default_branch
+
 # --------------- Functions that control the skill's behavior ------------------
 
 def get_welcome_response():
@@ -46,9 +54,12 @@ def get_welcome_response():
 
     session_attributes = {}
     card_title = "Welcome"
-    speech_output = "Welcome to the Alexa git interface. Currently you can \
-        specify the following three commands: get the last commit, get the last \
-        N commits, or get all branches"
+    speech_output = "Welcome to the Alexa git interface. "
+    """
+    Currently you can \
+    specify the following three commands: get the last commit, get the last \
+    N commits, or get all branches"
+    """
     # If the user either does not reply to the welcome message or says something
     # that is not understood, they will be prompted again with this text.
     reprompt_text = "Please say something like : get the last commit, or \
@@ -71,36 +82,42 @@ def handle_session_end_request():
 def get_last_n_commits_from_session(intent, session):
     global def_user, def_repo
 
-    session_attributes = {}
+    session_attributes = session.get('attributes', {})
     card_title = intent['name']
     should_end_session = False
     reprompt_text = "I didn't quite git that"
 
+
+    branch = get_branch_from_attributes(session_attributes)
+
     if 'Num' in intent['slots']:
-        num = intent['slots']['Num']['value']
-        speech_output = str(num) + "th"
+        num = int(intent['slots']['Num']['value'])
+        speech_output = last_n_commits(def_user, def_repo, branch=branch, n=num)
     else :
         speech_output = "I'm not sure how many commits you want. " \
                         "Please try again."
 
-    speech_output = last_n_commits(def_user, def_repo)
+    
     
     return build_response(session_attributes, build_speechlet_response(
         intent['name'], speech_output, reprompt_text, should_end_session))
 
 def get_last_commit_from_session(intent, session):
-    session_attributes = {}
+    session_attributes = session.get('attributes', {})
     card_title = intent['name']
     should_end_session = False
     reprompt_text = "I didn't quite git that"
 
-    speech_output = last_n_commits(def_user, def_repo, n=1)
+
+    branch = get_branch_from_attributes(session_attributes)
+
+    speech_output = last_n_commits(def_user, def_repo, branch=branch, n=1)
 
     return build_response(session_attributes, build_speechlet_response(
         intent['name'], speech_output, reprompt_text, should_end_session))
 
 def get_branches_from_session(intent, session):
-    session_attributes = {}
+    session_attributes = session.get('attributes', {})
     card_title = intent['name']
     should_end_session = False
     reprompt_text = "I didn't quite git that"
@@ -109,6 +126,43 @@ def get_branches_from_session(intent, session):
 
     return build_response(session_attributes, build_speechlet_response(
         intent['name'], speech_output, reprompt_text, should_end_session))
+
+def switch_branches_from_session(intent, session):
+    session_attributes = session.get('attributes', {})
+
+    card_title = intent['name']
+    should_end_session = False
+    reprompt_text = "I didn't quite git that"
+    speech_output = "bla bla "
+
+    if 'Num' in intent['slots']:
+        num = int(intent['slots']['Num']['value'])
+        (new_branch, speech_output) = switch_branch(def_user, def_repo, num)
+
+        if new_branch != "":
+            session_attributes['currentBranch'] = new_branch
+    else :
+        speech_output = "I'm not sure which branch you want to switch to. " \
+                        "Please try again."
+
+    return build_response(session_attributes, build_speechlet_response(
+        intent['name'], speech_output, reprompt_text, should_end_session))
+    
+
+def get_current_branch_from_session(intent, session):
+    session_attributes = session.get('attributes', {})
+    card_title = intent['name']
+    should_end_session = False
+    reprompt_text = "I didn't quite git that"
+
+
+    branch = get_branch_from_attributes(session_attributes)
+
+    speech_output = "The current branch is " + branch
+
+    return build_response(session_attributes, build_speechlet_response(
+        intent['name'], speech_output, reprompt_text, should_end_session))
+
 # --------------- Events ------------------
 
 def on_session_started(session_started_request, session):
@@ -145,6 +199,10 @@ def on_intent(intent_request, session):
         return get_last_commit_from_session(intent, session)
     elif intent_name == "GetBranchesIntent":
         return get_branches_from_session(intent, session)
+    elif intent_name == "SwitchBranchIntent":
+        return switch_branches_from_session(intent, session)
+    elif intent_name == "GetCurrentBranchIntent":
+        return get_current_branch_from_session(intent, session)
     elif intent_name == "AMAZON.HelpIntent":
         return get_welcome_response()
     elif intent_name == "AMAZON.CancelIntent" or intent_name == "AMAZON.StopIntent":

@@ -42,11 +42,8 @@ def last_n_commits(owner, repo, branch='master', n=3):
         
 #def date_to_speech(format, date):
 
-def list_branches(owner, repo):
-    global base, headers
-    
-    output = ""
 
+def get_branches(owner, repo):
     url = base + "/repos/{0}/{1}/branches".format(owner, repo)
     
     req = urllib2.Request(url, headers=headers)
@@ -56,6 +53,15 @@ def list_branches(owner, repo):
         return "Sorry, there was an error getting the branches."
 
     branches = json.loads(response.read())
+
+    return branches
+
+def list_branches(owner, repo):
+    global base, headers
+    
+    output = ""
+
+    branches = get_branches(owner, repo)
     n = len(branches)
 
     if n == 1:
@@ -68,6 +74,22 @@ def list_branches(owner, repo):
         output += "Branch {0} : {1} .".format(i+1, branch_name)
 
     return output
+
+
+def switch_branch(owner, repo, branch_num):
+    branch_num = branch_num - 1
+    output = ""
+    branches = get_branches(owner, repo)
+    n = len(branches)
+
+    new_branch = ""
+    if (branch_num < 0) or (branch_num >= n):
+        output = "Could not switch to requested branch"
+    else:
+        new_branch = str(branches[branch_num]['name'])
+        output = "Switched to branch " + new_branch
+    
+    return (new_branch, output)
 
 def parse_commit(commit):
     output = {}

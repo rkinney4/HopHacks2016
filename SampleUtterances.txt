@@ -9,3 +9,7 @@ GetBranchesIntent what are the branches for this repo
 GetNCommitsIntent get me the last {Num} commits 
 GetNCommitsIntent list the last {Num} commits
 GetNCommitsIntent what are the last {Num} commits
+SwitchBranchIntent switch to branch {Num}
+SwitchBranchIntent change to branch {Num}
+GetCurrentBranchIntent get the current branch
+GetCurrentBranchIntent what is the current branch
