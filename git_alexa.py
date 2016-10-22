@@ -96,8 +96,6 @@ def get_last_n_commits_from_session(intent, session):
     else :
         speech_output = "I'm not sure how many commits you want. " \
                         "Please try again."
-
-    speech_output = last_n_commits(default_user, default_repo)
     
     return build_response(session_attributes, build_speechlet_response(
         intent['name'], speech_output, reprompt_text, should_end_session))
