@@ -4,4 +4,8 @@ GetLastCommitIntent tell me the last commit message
 GetLastCommitIntent tell me the last commit
 GetBranchesIntent list the branches
 GetBranchesIntent tell me the branches
-GetNCommitsIntent get me the last {Num} commits  
+GetBranchesIntent give me the list of branches
+GetBranchesIntent what are the branches for this repo
+GetNCommitsIntent get me the last {Num} commits 
+GetNCommitsIntent list the last {Num} commits
+GetNCommitsIntent what are the last {Num} commits
