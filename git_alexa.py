@@ -132,7 +132,6 @@ def switch_branches_from_session(intent, session):
     card_title = intent['name']
     should_end_session = False
     reprompt_text = "I didn't quite git that"
-    speech_output = "bla bla "
 
     if 'Num' in intent['slots']:
         num = int(intent['slots']['Num']['value'])
@@ -143,6 +142,18 @@ def switch_branches_from_session(intent, session):
     else :
         speech_output = "I'm not sure which branch you want to switch to. " \
                         "Please try again."
+
+    return build_response(session_attributes, build_speechlet_response(
+        intent['name'], speech_output, reprompt_text, should_end_session))
+
+def switch_to_master_from_session(intent, session):
+    session_attributes = session.get('attributes', {})
+
+    card_title = intent['name']
+    should_end_session = False
+    reprompt_text = "I didn't quite git that"
+
+    session_attributes['currentBranch'] = default_branch
 
     return build_response(session_attributes, build_speechlet_response(
         intent['name'], speech_output, reprompt_text, should_end_session))
@@ -223,6 +234,8 @@ def on_intent(intent_request, session):
         return get_branches_from_session(intent, session)
     elif intent_name == "SwitchBranchIntent":
         return switch_branches_from_session(intent, session)
+    elif intent_name == "SwitchToMasterIntent":
+        return switch_to_master_from_session(intent, session)
     elif intent_name == "GetCurrentBranchIntent":
         return get_current_branch_from_session(intent, session)
     elif intent_name == "GetContributorsIntent":

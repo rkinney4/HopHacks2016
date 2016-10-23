@@ -16,6 +16,9 @@
       "intent": "GetTopContributorsIntent"
     },
     {
+      "intent": "SwitchToMasterIntent"
+    },
+    {
       "intent": "GetNCommitsIntent",
       "slots": [
         {

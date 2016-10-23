@@ -31,3 +31,5 @@ GetTopContributorsIntent get the top three contributors
 GetTopContributorsIntent get the top contributors
 GetTopContributorsIntent tell me the top contributors
 GetTopContributorsIntent tell me the top three contributors
+SwitchToMasterIntent switch to master branch
+SwitchToMasterIntent change branch to master
