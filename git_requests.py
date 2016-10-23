@@ -120,6 +120,39 @@ def get_contributors(owner, repo):
         output += "{0} : {1} ,\n".format(i+1, contributor)
     
     return output.strip('\n')
+    
+def get_top_three_contributors(owner, repo):
+    global base, headers
+    
+    output = ""
+    url = base + "/repos/{0}/{1}/stats/contributors".format(owner, repo)
+    
+    req = urllib2.Request(url, headers=headers)
+    try:
+        response = urllib2.urlopen(req)
+    except:
+        return "Sorry, I couldn't find what you asked for on github."
+    
+    if (response.getcode() == 202):
+        return "Github doesn't have this information cached right now. Ask again in a few moments."
+        
+    contributors = json.loads(response.read())
+    numCont = len(contributors)
+    
+    output += "Out of " + str(numCont) + " contributors, the top contributors are: \n"
+    
+    stats = []
+    for i in range(numCont):
+        contributor = contributors[i]['author']['login']
+        commits = contributors[i]['total']
+        stats.append([commits, contributor])
+    
+    stats.sort()
+    stats = stats[-3:]
+    for i in range(len(stats)):
+        output += "Number {0}. {1}, with {2} commits.\n".format(len(stats)-i, stats[i][1], stats[i][0])
+        
+    return output
 
 # ----------------- Helper Functions -----------------
     
