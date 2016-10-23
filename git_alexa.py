@@ -12,6 +12,7 @@ default_repo = "rails"
 #default_repo = "HopHacks2016"
 default_branch = "master"
 
+# Provided function to create speechlet responses to send to Alexa
 def build_speechlet_response(title, output, reprompt_text, should_end_session):
     return {
         'outputSpeech': {
@@ -32,7 +33,7 @@ def build_speechlet_response(title, output, reprompt_text, should_end_session):
         'shouldEndSession': should_end_session
     }
     
-
+# Function to create responses to send to Alexa
 def build_response(session_attributes, speechlet_response):
     return {
         'version': '1.0',
@@ -40,7 +41,7 @@ def build_response(session_attributes, speechlet_response):
         'response': speechlet_response
     }
 
-
+# Get the branch from the attributes, or return the default branch
 def get_branch_from_attributes(session_attributes):
     if 'currentBranch' in session_attributes:
         return session_attributes['currentBranch']
@@ -49,19 +50,13 @@ def get_branch_from_attributes(session_attributes):
 
 # --------------- Functions that control the skill's behavior ------------------
 
+# Welcome message for the skill
 def get_welcome_response():
-    """ If we wanted to initialize the session to have some attributes we could
-    add those here
-    """
 
     session_attributes = {}
     card_title = "Welcome"
     speech_output = "Welcome to the Alexa git interface. "
-    """
-    Currently you can \
-    specify the following three commands: get the last commit, get the last \
-    N commits, or get all branches"
-    """
+
     # If the user either does not reply to the welcome message or says something
     # that is not understood, they will be prompted again with this text.
     reprompt_text = "Please say something like : get the last commit, or \
@@ -71,7 +66,7 @@ def get_welcome_response():
     return build_response(session_attributes, build_speechlet_response(
         card_title, speech_output, reprompt_text, should_end_session))
 
-
+# End the session
 def handle_session_end_request():
     card_title = "Session Ended"
     speech_output = "Goodbye and remember to commit early and often"
@@ -80,7 +75,7 @@ def handle_session_end_request():
     return build_response({}, build_speechlet_response(
         card_title, speech_output, None, should_end_session))
 
-
+# Get the last n commits and say them
 def get_last_n_commits_from_session(intent, session):
     global default_user, default_repo
 
@@ -102,6 +97,7 @@ def get_last_n_commits_from_session(intent, session):
     return build_response(session_attributes, build_speechlet_response(
         intent['name'], speech_output, reprompt_text, should_end_session))
 
+# Get the last commit and say it
 def get_last_commit_from_session(intent, session):
     session_attributes = session.get('attributes', {})
     card_title = intent['name']
@@ -115,6 +111,7 @@ def get_last_commit_from_session(intent, session):
     return build_response(session_attributes, build_speechlet_response(
         intent['name'], speech_output, reprompt_text, should_end_session))
 
+# List all the branches of the repository
 def get_branches_from_session(intent, session):
     session_attributes = session.get('attributes', {})
     card_title = intent['name']
@@ -126,6 +123,7 @@ def get_branches_from_session(intent, session):
     return build_response(session_attributes, build_speechlet_response(
         intent['name'], speech_output, reprompt_text, should_end_session))
 
+# Switch to the specified branch number
 def switch_branches_from_session(intent, session):
     session_attributes = session.get('attributes', {})
 
@@ -146,6 +144,7 @@ def switch_branches_from_session(intent, session):
     return build_response(session_attributes, build_speechlet_response(
         intent['name'], speech_output, reprompt_text, should_end_session))
 
+# Switch to branch master
 def switch_to_master_from_session(intent, session):
     session_attributes = session.get('attributes', {})
 
@@ -160,7 +159,7 @@ def switch_to_master_from_session(intent, session):
     return build_response(session_attributes, build_speechlet_response(
         intent['name'], speech_output, reprompt_text, should_end_session))
     
-
+# Say the current branch
 def get_current_branch_from_session(intent, session):
     session_attributes = session.get('attributes', {})
     card_title = intent['name']
@@ -175,7 +174,8 @@ def get_current_branch_from_session(intent, session):
     return build_response(session_attributes, build_speechlet_response(
         intent['name'], speech_output, reprompt_text, should_end_session))
 
-
+# Get contributors for a repository, may say all or simply the number
+# if there are too many
 def get_contributors_from_session(intent, session):
     session_attributes = session.get('attributes', {})
     card_title = intent['name']
@@ -187,6 +187,7 @@ def get_contributors_from_session(intent, session):
     return build_response(session_attributes, build_speechlet_response(
         intent['name'], speech_output, reprompt_text, should_end_session))
 
+# Get the top contributors to the repository
 def get_top_contributors_from_session(intent, session):
     session_attributes = session.get('attributes', {})
     card_title = intent['name']
@@ -259,7 +260,6 @@ def on_session_ended(session_ended_request, session):
     """
     print("on_session_ended requestId=" + session_ended_request['requestId'] +
           ", sessionId=" + session['sessionId'])
-    # add cleanup logic here
 
 
 # --------------- Main handler ------------------
@@ -271,14 +271,6 @@ def lambda_handler(event, context):
     print("event.session.application.applicationId=" +
           event['session']['application']['applicationId'])
 
-    """
-    Uncomment this if statement and populate with your skill's application ID to
-    prevent someone else from configuring a skill that sends requests to this
-    function.
-    """
-    # if (event['session']['application']['applicationId'] !=
-    #         "amzn1.echo-sdk-ams.app.[unique-value-here]"):
-    #     raise ValueError("Invalid Application ID")
 
     if event['session']['new']:
         on_session_started({'requestId': event['request']['requestId']},
