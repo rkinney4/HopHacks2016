@@ -6,10 +6,10 @@ from git_requests import *
 
 # --------------- Helpers that build all of the responses ----------------------
 
-#default_user = "nodejs"
-#default_repo = "node"
-default_user = "rkinney4"
-default_repo = "HopHacks2016"
+default_user = "rails"
+default_repo = "rails"
+#default_user = "rkinney4"
+#default_repo = "HopHacks2016"
 default_branch = "master"
 
 def build_speechlet_response(title, output, reprompt_text, should_end_session):
@@ -154,6 +154,8 @@ def switch_to_master_from_session(intent, session):
     reprompt_text = "I didn't quite git that"
 
     session_attributes['currentBranch'] = default_branch
+
+    speech_output = "Switched to branch master"
 
     return build_response(session_attributes, build_speechlet_response(
         intent['name'], speech_output, reprompt_text, should_end_session))
