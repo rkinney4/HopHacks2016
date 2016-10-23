@@ -20,7 +20,7 @@ We have created a skill for Amazon Alexa that alows Alexa to interface with GitH
   - [AWS Lambda]
 
 #### Building our Hack
-  1. Clone or download the repositor
+  1. Clone or download the repository
   2. Run the script `./build.sh` this creates a zip file to be uploaded to AWS Lambda
   3. Upload the generated zip to AWS Lambda, creating a new function. Be sure to save the ARN in the upper right corner.
   4. On the Alexa Developer Console create a new skill. Upload the intent model and sample utterances to the new skill.
