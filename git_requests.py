@@ -11,19 +11,21 @@ from datetime import datetime
 base = "http://api.github.com"
 headers = headers = {"Accept": "application/vnd.github.v3+json"}
     
+# Gets the last n commits on the branch specified
 def last_n_commits(owner, repo, branch='master', n=3):
     global base, headers
     
     output = ""
-    
     url = base + "/repos/{0}/{1}/commits?sha={2}".format(owner, repo, branch)
     
+    # request information from GitHub
     req = urllib2.Request(url, headers=headers)
     try:
         response = urllib2.urlopen(req)
     except:
         return "Sorry, I couldn't find any commits."
         
+    # Parse returned json
     commits = json.loads(response.read())
     
     if len(commits) < n:
@@ -44,20 +46,23 @@ def last_n_commits(owner, repo, branch='master', n=3):
     
     return output.strip('\n')
 
-
+# Gets the raw branch info from GitHub
 def get_branches(owner, repo):
     url = base + "/repos/{0}/{1}/branches".format(owner, repo)
     
+    # request information from GitHub
     req = urllib2.Request(url, headers=headers)
     try:
         response = urllib2.urlopen(req)
     except:
         return "Sorry, there was an error getting the branches."
 
+    # return json
     branches = json.loads(response.read())
 
     return branches
 
+# Gets the list of branches in the repository
 def list_branches(owner, repo):
     global base, headers
     
@@ -66,6 +71,7 @@ def list_branches(owner, repo):
     branches = get_branches(owner, repo)
     n = len(branches)
 
+    # Parse branch json
     if n == 1:
         output += "I found 1 branch: \n"
     else:
@@ -77,12 +83,14 @@ def list_branches(owner, repo):
 
     return output
 
+# Switches Alexa's current branch
 def switch_branch(owner, repo, branch_num):
     branch_num = branch_num - 1
     output = ""
     branches = get_branches(owner, repo)
     n = len(branches)
 
+    # check that requested branch is valid
     new_branch = ""
     if (branch_num < 0) or (branch_num >= n):
         output = "Could not switch to requested branch"
@@ -92,21 +100,27 @@ def switch_branch(owner, repo, branch_num):
     
     return (new_branch, output)
     
+# Get all contributors to the repository. If the number of contributors is over
+# 25, will just output the number of contributors.
 def get_contributors(owner, repo):
     global base, headers
     
     output = ""
     url = base + "/repos/{0}/{1}/stats/contributors".format(owner, repo)
     
+    # request information from GitHub
     req = urllib2.Request(url, headers=headers)
     try:
         response = urllib2.urlopen(req)
     except:
         return "Sorry, I couldn't find what you asked for on github."
     
+    # GitHub returns 202 if the statistics are not yet cached, and begins to
+    # calculate the statistics requested.
     if (response.getcode() == 202):
         return "Github doesn't have this information cached right now. Ask again in a few moments."
-        
+    
+    # Parse returned json
     contributors = json.loads(response.read())
     numCont = len(contributors)
     
@@ -120,22 +134,27 @@ def get_contributors(owner, repo):
         output += "{0} : {1} ,\n".format(i+1, contributor)
     
     return output.strip('\n')
-    
+
+# Gets the top three contributors to the repo, along with their number of commits
 def get_top_three_contributors(owner, repo):
     global base, headers
     
     output = ""
     url = base + "/repos/{0}/{1}/stats/contributors".format(owner, repo)
     
+    # request information from GitHub
     req = urllib2.Request(url, headers=headers)
     try:
         response = urllib2.urlopen(req)
     except:
         return "Sorry, I couldn't find what you asked for on github."
     
+    # GitHub returns 202 if the statistics are not yet cached, and begins to
+    # calculate the statistics requested.
     if (response.getcode() == 202):
         return "Github doesn't have this information cached right now. Ask again in a few moments."
-        
+    
+    # Parse returned json
     contributors = json.loads(response.read())
     numCont = len(contributors)
     
@@ -155,7 +174,8 @@ def get_top_three_contributors(owner, repo):
     return output
 
 # ----------------- Helper Functions -----------------
-    
+
+# parses json for a commit
 def parse_commit(commit):
     output = {}
     output['author'] = commit['author']['name']
@@ -163,6 +183,7 @@ def parse_commit(commit):
     output['message'] = commit['message']
     return output
 
+# Converts a date returned by GitHub into speech for Alexa.
 def date_to_speech(date):
     date = datetime.strptime(date, "%Y-%m-%dT%H:%M:%SZ")
     day = datetime.strftime(date, "%d").lstrip('0')
